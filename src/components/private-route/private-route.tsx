@@ -6,7 +6,7 @@ type PrivateRouteProps = {
 };
 
 function PrivateRoute({children}: PrivateRouteProps): JSX.Element {
-  const isAuth = false;
+  const isAuth = true;
 
   if(!isAuth) {
     return <Navigate to={AppRoute.Login} />;
