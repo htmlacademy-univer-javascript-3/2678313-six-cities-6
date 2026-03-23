@@ -3,6 +3,7 @@ import {useState} from 'react';
 import {AppRoute} from '../../const';
 import {Offer} from '../../types/offer';
 import OffersList from '../offers-list/offers-list';
+import Map from '../map/map';
 
 type HomepageProps = {
   offers: Offer[];
@@ -116,7 +117,7 @@ function HomepageShell({offers}: HomepageProps): JSX.Element {
             </section>
 
             <div className="cities__right-section">
-              <section className="cities__map map" data-active-offer-id={activeOfferId ?? ''} />
+              <Map offers={offers} selectedOfferId={activeOfferId} />
             </div>
           </div>
         </div>

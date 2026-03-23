@@ -7,6 +7,10 @@ export const offers: Offer[] = [
     type: 'Apartment',
     price: 120,
     city: 'Amsterdam',
+    location: {
+      lat: 52.3909553943508,
+      lng: 4.85309666406198,
+    },
     previewImage: '/img/apartment-01.jpg',
     images: [
       '/img/room.jpg',
@@ -45,6 +49,10 @@ export const offers: Offer[] = [
     type: 'Room',
     price: 80,
     city: 'Amsterdam',
+    location: {
+      lat: 52.3609553943508,
+      lng: 4.85309666406198,
+    },
     previewImage: '/img/room.jpg',
     images: [
       '/img/room.jpg',
@@ -72,7 +80,11 @@ export const offers: Offer[] = [
     title: 'White castle',
     type: 'Apartment',
     price: 180,
-    city: 'Cologne',
+    city: 'Amsterdam',
+    location: {
+      lat: 52.3909553943508,
+      lng: 4.929309666406198,
+    },
     previewImage: '/img/apartment-small-04.jpg',
     images: [
       '/img/apartment-small-04.jpg',
@@ -100,7 +112,11 @@ export const offers: Offer[] = [
     title: 'Canal view family house',
     type: 'House',
     price: 210,
-    city: 'Brussels',
+    city: 'Amsterdam',
+    location: {
+      lat: 52.3809553943508,
+      lng: 4.939309666406198,
+    },
     previewImage: '/img/studio-01.jpg',
     images: [
       '/img/studio-01.jpg',
