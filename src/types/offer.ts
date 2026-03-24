@@ -4,6 +4,10 @@ export type Offer = {
   type: 'Apartment' | 'Room' | 'House';
   price: number;
   city: string;
+  location: {
+    lat: number;
+    lng: number;
+  };
   previewImage: string;
   images: string[];
   isPremium: boolean;
