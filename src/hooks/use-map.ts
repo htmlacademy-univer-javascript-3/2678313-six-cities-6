@@ -9,7 +9,7 @@ function useMap(
   const [map, setMap] = useState<LeafletMap | null>(null);
 
   useEffect(() => {
-    if (mapRef.current === null || map !== null) {
+    if (mapRef.current === null) {
       return;
     }
 
@@ -28,11 +28,12 @@ function useMap(
 
     instance.addLayer(layer);
     setMap(instance);
-  }, [mapRef, map, center, zoom]);
 
-  useEffect(() => () => {
-    map?.remove();
-  }, [map]);
+    return () => {
+      instance.remove();
+      setMap(null);
+    };
+  }, [mapRef, center, zoom]);
 
   return map;
 }

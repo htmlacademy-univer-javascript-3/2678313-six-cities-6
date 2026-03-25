@@ -1,13 +1,13 @@
 import {Link} from 'react-router-dom';
 import {useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {AppRoute} from '../../const';
-import {Offer} from '../../types/offer';
+import {changeCity} from '../../store/action';
+import {RootState} from '../../store';
+import {getCity, getOffersByCity} from '../../store/reducer';
 import OffersList from '../offers-list/offers-list';
 import Map from '../map/map';
-
-type HomepageProps = {
-  offers: Offer[];
-};
+import CitiesList from '../cities-list/cities-list';
 
 const locations = [
   'Paris',
@@ -25,7 +25,10 @@ const sortingOptions = [
   'Top rated first',
 ];
 
-function HomepageShell({offers}: HomepageProps): JSX.Element {
+function HomepageShell(): JSX.Element {
+  const dispatch = useDispatch();
+  const city = useSelector((state: RootState) => getCity(state));
+  const offers = useSelector((state: RootState) => getOffersByCity(state));
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
 
   return (
@@ -68,20 +71,11 @@ function HomepageShell({offers}: HomepageProps): JSX.Element {
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-            <ul className="locations__list tabs__list">
-              {locations.map((location) => (
-                <li className="locations__item" key={location}>
-                  <a
-                    className={`locations__item-link tabs__item${
-                      location === 'Amsterdam' ? ' tabs__item--active' : ''
-                    }`}
-                    href="#"
-                  >
-                    <span>{location}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <CitiesList
+              cities={locations}
+              currentCity={city}
+              onCityChange={(selectedCity) => dispatch(changeCity(selectedCity))}
+            />
           </section>
         </div>
 
@@ -89,7 +83,7 @@ function HomepageShell({offers}: HomepageProps): JSX.Element {
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{offers.length} places to stay in Amsterdam</b>
+              <b className="places__found">{offers.length} places to stay in {city}</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
