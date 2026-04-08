@@ -1,14 +1,15 @@
 import {Link} from 'react-router-dom';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {AppRoute} from '../../const';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {changeCity} from '../../store/action';
-import {getCity, getOffersByCity} from '../../store/reducer';
-import {Offer} from '../../types/offer';
+import {changeCity, fetchOffersAction} from '../../store/action';
+import {getCity, getHasOffersErrorStatus, getOffersByCity, getOffersLoadingStatus} from '../../store/reducer';
+import {OfferPreview} from '../../types/offer';
 import OffersList from '../offers-list/offers-list';
 import Map from '../map/map';
 import CitiesList from '../cities-list/cities-list';
 import SortingOptions, {SortingType} from '../sorting-options/sorting-options';
+import Spinner from '../spinner/spinner';
 
 const locations = [
   'Paris',
@@ -26,7 +27,7 @@ const sortingOptions: SortingType[] = [
   'Top rated first',
 ];
 
-function sortOffersByType(offers: Offer[], sortingType: SortingType): Offer[] {
+function sortOffersByType(offers: OfferPreview[], sortingType: SortingType): OfferPreview[] {
   switch (sortingType) {
     case 'Price: low to high':
       return [...offers].sort((firstOffer, secondOffer) => firstOffer.price - secondOffer.price);
@@ -44,9 +45,27 @@ function HomepageShell(): JSX.Element {
   const dispatch = useAppDispatch();
   const city = useAppSelector(getCity);
   const offers = useAppSelector(getOffersByCity);
+  const isOffersLoading = useAppSelector(getOffersLoadingStatus);
+  const hasOffersError = useAppSelector(getHasOffersErrorStatus);
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
   const [currentSorting, setCurrentSorting] = useState<SortingType>('Popular');
   const sortedOffers = sortOffersByType(offers, currentSorting);
+
+  useEffect(() => {
+    dispatch(fetchOffersAction());
+  }, [dispatch]);
+
+  if (isOffersLoading) {
+    return <Spinner />;
+  }
+
+  if (hasOffersError) {
+    return (
+      <p style={{padding: '40px', textAlign: 'center'}}>
+        Failed to load offers. Please try again later.
+      </p>
+    );
+  }
 
   return (
     <div className="page page--gray page--main">

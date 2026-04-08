@@ -1,8 +1,8 @@
-import {Offer} from '../../types/offer';
+import {OfferPreview} from '../../types/offer';
 import PlaceCard, {PlaceCardType} from '../place-card/place-card';
 
 type OffersListProps = {
-  offers: Offer[];
+  offers: OfferPreview[];
   className?: string;
   cardType?: PlaceCardType;
   onActiveOfferChange?: (offerId: string | null) => void;

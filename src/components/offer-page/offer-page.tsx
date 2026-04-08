@@ -1,25 +1,40 @@
+import {useEffect} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import {AppRoute} from '../../const';
-import {Offer} from '../../types/offer';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {fetchOfferAction} from '../../store/action';
+import {getHasOfferErrorStatus, getOffer, getOfferLoadingStatus, getOffers} from '../../store/reducer';
 import NotFound from '../not-found/not-found';
 import OffersList from '../offers-list/offers-list';
 import CommentForm from '../comment-form/comment-form';
+import Spinner from '../spinner/spinner';
 
-type OfferPageProps = {
-  offers: Offer[];
-};
-
-function OfferPage({offers}: OfferPageProps): JSX.Element {
+function OfferPage(): JSX.Element {
+  const dispatch = useAppDispatch();
   const {id} = useParams();
-  const offer = offers.find((item) => item.id === id);
+  const offers = useAppSelector(getOffers);
+  const offer = useAppSelector(getOffer);
+  const isOfferLoading = useAppSelector(getOfferLoadingStatus);
+  const hasOfferError = useAppSelector(getHasOfferErrorStatus);
 
-  if (!offer) {
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchOfferAction(id));
+    }
+  }, [dispatch, id]);
+
+  if (isOfferLoading) {
+    return <Spinner />;
+  }
+
+  if (!id || !offer || hasOfferError) {
     return <NotFound />;
   }
 
   const nearOffers = offers
     .filter((item) => item.city === offer.city && item.id !== offer.id)
     .slice(0, 3);
+  const formattedType = `${offer.type[0].toUpperCase()}${offer.type.slice(1)}`;
 
   return (
     <div className="page">
@@ -90,7 +105,7 @@ function OfferPage({offers}: OfferPageProps): JSX.Element {
               </div>
 
               <ul className="offer__features">
-                <li className="offer__feature offer__feature--entire">{offer.type}</li>
+                <li className="offer__feature offer__feature--entire">{formattedType}</li>
                 <li className="offer__feature offer__feature--bedrooms">{offer.bedrooms} Bedrooms</li>
                 <li className="offer__feature offer__feature--adults">Max {offer.maxAdults} adults</li>
               </ul>

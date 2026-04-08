@@ -1,16 +1,37 @@
+import {useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const';
-import {Offer} from '../../types/offer';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {fetchOffersAction} from '../../store/action';
+import {getHasOffersErrorStatus, getOffers, getOffersLoadingStatus} from '../../store/reducer';
+import {OfferPreview} from '../../types/offer';
 import OffersList from '../offers-list/offers-list';
+import Spinner from '../spinner/spinner';
 
-type FavoritesPageProps = {
-  offers: Offer[];
-};
-
-function FavoritesPage({offers}: FavoritesPageProps): JSX.Element {
+function FavoritesPage(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const offers = useAppSelector(getOffers);
+  const isOffersLoading = useAppSelector(getOffersLoadingStatus);
+  const hasOffersError = useAppSelector(getHasOffersErrorStatus);
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
 
-  const offersByCity = favoriteOffers.reduce<Record<string, Offer[]>>((acc, offer) => {
+  useEffect(() => {
+    dispatch(fetchOffersAction());
+  }, [dispatch]);
+
+  if (isOffersLoading) {
+    return <Spinner />;
+  }
+
+  if (hasOffersError) {
+    return (
+      <p style={{padding: '40px', textAlign: 'center'}}>
+        Failed to load offers. Please try again later.
+      </p>
+    );
+  }
+
+  const offersByCity = favoriteOffers.reduce<Record<string, OfferPreview[]>>((acc, offer) => {
     if (!acc[offer.city]) {
       acc[offer.city] = [];
     }

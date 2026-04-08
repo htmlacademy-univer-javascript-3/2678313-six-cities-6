@@ -5,5 +5,10 @@ export enum AppRoute {
   OfferId = '/offer/:id'
 }
 
+export enum APIRoute {
+  Offers = '/offers'
+}
 
-export const offersCount = 3120;
+export const SERVER_URL = 'https://14.design.htmlacademy.pro/six-cities';
+export const REQUEST_TIMEOUT = 5000;
+export const TOKEN_KEY_NAME = 'six-cities-token';

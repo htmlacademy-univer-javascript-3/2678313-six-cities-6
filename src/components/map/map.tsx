@@ -1,11 +1,11 @@
 import {useEffect, useRef} from 'react';
 import {LayerGroup, icon, layerGroup, marker} from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import {Offer} from '../../types/offer';
+import {OfferPreview} from '../../types/offer';
 import useMap from '../../hooks/use-map';
 
 type MapProps = {
-  offers: Offer[];
+  offers: OfferPreview[];
   selectedOfferId: string | null;
 };
 

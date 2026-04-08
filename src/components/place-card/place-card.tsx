@@ -1,10 +1,10 @@
 import {Link} from 'react-router-dom';
-import {Offer} from '../../types/offer';
+import {OfferPreview} from '../../types/offer';
 
 export type PlaceCardType = 'cities' | 'favorites' | 'near';
 
 type PlaceCardProps = {
-  offer: Offer;
+  offer: OfferPreview;
   cardType?: PlaceCardType;
   onHover?: (offerId: string) => void;
   onLeave?: () => void;
@@ -37,6 +37,7 @@ const imageSizeByType: Record<PlaceCardType, {width: number; height: number}> = 
 function PlaceCard({offer, cardType = 'cities', onHover, onLeave}: PlaceCardProps): JSX.Element {
   const {width, height} = imageSizeByType[cardType];
   const ratingWidth = `${(offer.rating / 5) * 100}%`;
+  const formattedType = `${offer.type[0].toUpperCase()}${offer.type.slice(1)}`;
 
   return (
     <article
@@ -85,7 +86,7 @@ function PlaceCard({offer, cardType = 'cities', onHover, onLeave}: PlaceCardProp
         <h2 className="place-card__name">
           <Link to={`/offer/${offer.id}`}>{offer.title}</Link>
         </h2>
-        <p className="place-card__type">{offer.type}</p>
+        <p className="place-card__type">{formattedType}</p>
       </div>
     </article>
   );
