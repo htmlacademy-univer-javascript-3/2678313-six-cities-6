@@ -1,5 +1,6 @@
 import axios, {AxiosInstance, InternalAxiosRequestConfig} from 'axios';
-import {REQUEST_TIMEOUT, SERVER_URL, TOKEN_KEY_NAME} from './const';
+import {REQUEST_TIMEOUT, SERVER_URL} from './const';
+import {getToken} from './services/token';
 import {Location, LocationResponse, Offer, OfferPreview, OfferPreviewResponse, OfferResponse} from './types/offer';
 
 const adaptLocationToClient = (location: LocationResponse): Location => ({
@@ -38,7 +39,7 @@ export const createAPI = (): AxiosInstance => {
   });
 
   api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-    const token = localStorage.getItem(TOKEN_KEY_NAME);
+    const token = getToken();
 
     if (token) {
       config.headers['X-Token'] = token;
